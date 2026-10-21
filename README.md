@@ -34,7 +34,7 @@ Images are published to `ghcr.io/dedsxc/mcp-pmm` by release-please.
 
 ## Tools
 
-`pmm_version`, `pmm_readiness`, `pmm_settings`, `pmm_check_updates`, `pmm_current_user`, `pmm_list_nodes`, `pmm_get_node`, `pmm_list_services`, `pmm_get_service`, `pmm_list_agents`, `pmm_get_agent`, `pmm_agent_logs`, `pmm_list_management_*`, `pmm_list_advisors`, `pmm_list_advisor_checks`, `pmm_failed_advisor_checks`, `pmm_failed_services`, `pmm_list_backup_*`, `pmm_list_restores`, `pmm_list_alert_templates`, `pmm_ha_status`, `pmm_qan_report`, `pmm_qan_query_example`, `pmm_qan_health`.
+`pmm_version`, `pmm_readiness`, `pmm_settings`, `pmm_check_updates`, `pmm_list_nodes`, `pmm_get_node`, `pmm_list_services`, `pmm_get_service`, `pmm_list_agents`, `pmm_get_agent`, `pmm_agent_logs`, `pmm_list_management_services`, `pmm_list_management_nodes`, `pmm_list_management_agents`, `pmm_list_advisors`, `pmm_list_advisor_checks`, `pmm_failed_advisor_checks`, `pmm_failed_services`, `pmm_list_backup_*`, `pmm_list_restores`, `pmm_list_alert_templates`, `pmm_ha_status`, `pmm_qan_report`, `pmm_qan_query_example`, `pmm_qan_health`.
 
 ## License
 
