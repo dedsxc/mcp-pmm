@@ -6,7 +6,7 @@ import os
 
 from fastmcp import FastMCP
 
-from .client import PMMAPIError, PMMAuthenticationError, PMMClient
+from .client import PMMAPIError, PMMAuthenticationError, PMMClient, PMMPermissionError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mcp-pmm")
@@ -35,6 +35,8 @@ def _call(fn, *args, **kwargs) -> str:
         return _fmt_json(fn(*args, **kwargs))
     except PMMAuthenticationError as e:
         return f"❌ Not authenticated: {e}"
+    except PMMPermissionError as e:
+        return f"❌ Forbidden: {e}"
     except PMMAPIError as e:
         return f"❌ PMM error: {e} {e.details or ''}".strip()
     except Exception as e:
@@ -67,12 +69,6 @@ def pmm_settings() -> str:
 def pmm_check_updates() -> str:
     """Check whether a PMM update is available."""
     return _call(get_client().get, "/v1/server/updates")
-
-
-@mcp.tool()
-def pmm_current_user() -> str:
-    """Get details about the user/token used to call PMM."""
-    return _call(get_client().get, "/v1/users/me")
 
 
 # ── Inventory ────────────────────────────────────────────────
@@ -150,9 +146,19 @@ def pmm_list_management_nodes() -> str:
 
 
 @mcp.tool()
-def pmm_list_management_agents() -> str:
-    """List agents with their status (management view)."""
-    return _call(get_client().get, "/v1/management/agents")
+def pmm_list_management_agents(service_id: str = "", node_id: str = "") -> str:
+    """List agents with their status (management view).
+
+    Exactly one of service_id or node_id is required by PMM.
+
+    Args:
+        service_id: Service id to list agents for
+        node_id: Node id to list agents for
+    """
+    if bool(service_id) == bool(node_id):
+        return "❌ Provide exactly one of service_id or node_id"
+    params = {"service_id": service_id} if service_id else {"node_id": node_id}
+    return _call(get_client().get, "/v1/management/agents", params)
 
 
 # ── Advisors ─────────────────────────────────────────────────

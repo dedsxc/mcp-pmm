@@ -21,6 +21,10 @@ class PMMAuthenticationError(PMMAPIError):
     """Authentication error (missing or invalid token)."""
 
 
+class PMMPermissionError(PMMAPIError):
+    """The token is valid but its role is not allowed to call this endpoint."""
+
+
 class PMMClient:
     """Client for the PMM API.
 
@@ -53,8 +57,10 @@ class PMMClient:
                 )
         except httpx.HTTPError as e:
             raise PMMAPIError(f"Request to PMM failed: {e}") from e
-        if resp.status_code in (401, 403):
-            raise PMMAuthenticationError(f"PMM rejected the token (HTTP {resp.status_code})")
+        if resp.status_code == 401:
+            raise PMMAuthenticationError("PMM rejected the token (HTTP 401)")
+        if resp.status_code == 403:
+            raise PMMPermissionError("Token role is not allowed to call this endpoint (HTTP 403)")
         if resp.status_code >= 400:
             raise PMMAPIError(f"PMM returned HTTP {resp.status_code}", resp.text[:500])
         if not resp.content:
